@@ -5,9 +5,14 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     runs-on: windows-latest
+    env:
+      HAS_WINDOWS_CERT: ${{ secrets.WINDOWS_CERT_BASE64 != '' }}
 
     steps:
       - name: Check out Git repository
@@ -55,6 +60,7 @@ jobs:
           Set-Content -Path "./packages/core/src/types/build.ts" -Value $content
 
       - name: Decode certificate
+        if: env.HAS_WINDOWS_CERT == 'true'
         run: |
           $certPath = Join-Path -Path $env:RUNNER_TEMP -ChildPath "build_cert.pfx"
           $certContent = [System.Convert]::FromBase64String($env:WINDOWS_CERT_BASE64)
@@ -83,6 +89,7 @@ jobs:
         run: npm run publish -- --win
 
       - name: Clean up certificate
+        if: env.HAS_WINDOWS_CERT == 'true'
         run: |
           if (Test-Path $env:CERTIFICATE_PATH) {
             Remove-Item -Path $env:CERTIFICATE_PATH
@@ -91,6 +98,8 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
+    env:
+      HAS_MACOS_CERT: ${{ secrets.MACOS_CERTIFICATE_BASE64 != '' }}
 
     steps:
       - name: Check out Git repository
@@ -131,6 +140,7 @@ jobs:
           EOF
 
       - name: Decode and Import macOS Certificate
+        if: env.HAS_MACOS_CERT == 'true'
         run: |
           # Decode the base64 encoded certificate
           CERTIFICATE_CONTENT=$(echo "${{ secrets.MACOS_CERTIFICATE_BASE64 }}" | base64 --decode)
@@ -192,7 +202,7 @@ jobs:
           npm run publish -- --mac --arch="x64"
 
       - name: Delete Temporary Keychain
-        if: always()
+        if: always() && env.HAS_MACOS_CERT == 'true'
         run: |
           security delete-keychain "${{ env.KEYCHAIN_PATH }}"
         shell: bash

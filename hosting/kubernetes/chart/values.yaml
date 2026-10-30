@@ -12,7 +12,7 @@ colanode:
 
   image:
     # -- Colanode server image repository
-    repository: ghcr.io/colanode/server
+    repository: ghcr.io/smartlader-de/colanode-server
     # -- Colanode server image pull policy
     pullPolicy: Always
     # -- Colanode server image tag
@@ -207,7 +207,7 @@ postgresql:
   enabled: true
   image:
     registry: ghcr.io
-    repository: colanode/postgresql
+    repository: smartlader-de/postgresql
     tag: '17'
     pullPolicy: Always
 

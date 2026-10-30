@@ -49,23 +49,26 @@ const config: ForgeConfig = {
       return true;
     },
     extraResource: ['assets'],
-    osxSign: {
-      type: 'distribution',
-      keychain: process.env.KEYCHAIN!,
-      optionsForFile: (_) => {
-        return {
-          hardenedRuntime: true,
-          entitlements: 'entitlements.mac.plist',
-          entitlementsInherit: 'entitlements.mac.plist',
-        };
+    // Unsigned builds when no Apple credentials are configured.
+    ...(process.env.APPLE_ID && {
+      osxSign: {
+        type: 'distribution',
+        keychain: process.env.KEYCHAIN!,
+        optionsForFile: (_) => {
+          return {
+            hardenedRuntime: true,
+            entitlements: 'entitlements.mac.plist',
+            entitlementsInherit: 'entitlements.mac.plist',
+          };
+        },
       },
-    },
-    osxNotarize: {
-      appleId: process.env.APPLE_ID!,
-      appleIdPassword: process.env.APPLE_ID_PASSWORD!,
-      teamId: process.env.APPLE_TEAM_ID!,
-      keychain: process.env.KEYCHAIN!,
-    },
+      osxNotarize: {
+        appleId: process.env.APPLE_ID!,
+        appleIdPassword: process.env.APPLE_ID_PASSWORD!,
+        teamId: process.env.APPLE_TEAM_ID!,
+        keychain: process.env.KEYCHAIN!,
+      },
+    }),
   },
   rebuildConfig: {},
   makers: [
@@ -91,7 +94,7 @@ const config: ForgeConfig = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'colanode',
+          owner: 'smartlader-de',
           name: 'colanode',
         },
         prerelease: false,

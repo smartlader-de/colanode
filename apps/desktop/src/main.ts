@@ -59,7 +59,7 @@ if (started) {
 updateElectronApp({
   updateSource: {
     type: UpdateSourceType.ElectronPublicUpdateService,
-    repo: 'colanode/colanode',
+    repo: 'smartlader-de/colanode',
     host: 'https://update.electronjs.org',
   },
   updateInterval: '5 minutes',
