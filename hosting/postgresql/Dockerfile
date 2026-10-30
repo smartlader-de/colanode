@@ -2,7 +2,7 @@
 FROM pgvector/pgvector:pg17 AS builder
 
 # ── Stage 2: Bitnami PostgreSQL ──────────────────────────────
-FROM bitnami/postgresql:17
+FROM bitnamilegacy/postgresql:17.6.0-debian-12-r4
 
 # Copy pgvector extension to the PostgreSQL container
 COPY --from=builder /usr/lib/postgresql/17/lib/vector.so \
