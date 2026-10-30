@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -16,6 +17,11 @@ concurrency:
 jobs:
   tests:
     name: Run affected tests
+    # Saves CI: skip drafts, and in a stack test only the top PR, which contains every layer.
+    if: >-
+      github.event.pull_request.draft == false &&
+      (github.event.pull_request.stack == null ||
+      github.event.pull_request.stack.position == github.event.pull_request.stack.size)
     runs-on: ubuntu-latest
     env:
       TURBO_SCM_BASE: origin/main
