@@ -223,7 +223,7 @@ export const sendEmailVerifyEmail = async (otpId: string): Promise<void> => {
   });
 
   await emailService.sendEmail({
-    subject: 'Your Colanode email verification code',
+    subject: 'Ihr Bestätigungscode für die Energie Management Stammtisch Kollaborationsplattform',
     to: email,
     html,
   });
@@ -257,7 +257,7 @@ export const sendEmailPasswordResetEmail = async (
   });
 
   await emailService.sendEmail({
-    subject: 'Your Colanode password reset code',
+    subject: 'Ihr Code zum Zurücksetzen des Passworts für die Energie Management Stammtisch Kollaborationsplattform',
     to: email,
     html,
   });
@@ -308,7 +308,7 @@ export const sendWorkspaceInvitationEmail = async (
   });
 
   await emailService.sendEmail({
-    subject: `${inviterAccount.name} invited you to ${workspace.name} on Colanode`,
+    subject: `${inviterAccount.name} hat Sie zur Energie Management Stammtisch Kollaborationsplattform eingeladen`,
     to: user.email,
     html,
   });
